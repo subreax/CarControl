@@ -13,15 +13,14 @@ import com.subreax.hackaton.ui.carpicker.CarPickerScreen
 import com.subreax.hackaton.ui.home.HomeScreen
 import com.subreax.hackaton.ui.signin.SignInScreen
 import com.subreax.hackaton.ui.signup.SignUpScreen
-import timber.log.Timber
 
 private object Screens {
-    const val welcome = "welcome"
-    const val signIn = "sign-in"
-    const val signUp = "sign-up"
-    const val home = "home"
-    const val car_picker = "car-picker"
-    const val car_editor = "car-editor"
+    const val Welcome = "welcome"
+    const val SignIn = "sign-in"
+    const val SignUp = "sign-up"
+    const val Home = "home"
+    const val CarPicker = "car-picker"
+    const val CarEditor = "car-editor"
 }
 
 @Composable
@@ -29,33 +28,33 @@ fun MainNavigation(
     locationTrackerServiceController: LocationTrackerServiceController,
     navController: NavHostController = rememberNavController()
 ) {
-    NavHost(navController = navController, startDestination = Screens.welcome) {
-        composable(Screens.welcome) {
+    NavHost(navController = navController, startDestination = Screens.Welcome) {
+        composable(Screens.Welcome) {
             WelcomeScreen(
                 signInClicked = {
-                    navController.navigate(Screens.signIn)
+                    navController.navigate(Screens.SignIn)
                 },
                 signUpClicked = {
-                    navController.navigate(Screens.signUp)
+                    navController.navigate(Screens.SignUp)
                 }
             )
         }
 
-        composable(Screens.signIn) {
+        composable(Screens.SignIn) {
             SignInScreen(
                 navBack = {
                     navController.popBackStack()
                 },
                 navHome = {
-                    navController.navigate(Screens.home) {
-                        popUpTo(Screens.welcome) {
+                    navController.navigate(Screens.Home) {
+                        popUpTo(Screens.Welcome) {
                             inclusive = true
                         }
                     }
                 },
                 navToCarPicker = {
-                    navController.navigate(Screens.car_picker) {
-                        popUpTo(Screens.welcome) {
+                    navController.navigate(Screens.CarPicker) {
+                        popUpTo(Screens.Welcome) {
                             inclusive = true
                         }
                     }
@@ -63,14 +62,14 @@ fun MainNavigation(
             )
         }
 
-        composable(Screens.signUp) {
+        composable(Screens.SignUp) {
             SignUpScreen(
                 navBack = {
                     navController.popBackStack()
                 },
                 navHome = {
-                    navController.navigate(Screens.car_picker) {
-                        popUpTo(Screens.welcome) {
+                    navController.navigate(Screens.CarPicker) {
+                        popUpTo(Screens.Welcome) {
                             inclusive = true
                         }
                     }
@@ -78,34 +77,40 @@ fun MainNavigation(
             )
         }
 
-        composable(Screens.home) {
+        composable(Screens.Home) {
             HomeScreen(locationTrackerServiceController)
         }
 
-        composable(Screens.car_picker) {
+        composable(Screens.CarPicker) {
             val hasParentScreen = navController.previousBackStackEntry != null
-            Timber.d("$hasParentScreen")
             CarPickerScreen(
                 showButtonBack = hasParentScreen,
                 navBack = {
                     navController.popBackStack()
                 },
                 navToCarEditor = {
-                    navController.navigate("${Screens.car_editor}?carId=${it.id}")
+                    navController.navigate("${Screens.CarEditor}?carId=${it.id}")
                 },
                 navToCarBuilder = {
-                    navController.navigate(Screens.car_editor)
+                    navController.navigate(Screens.CarEditor)
                 }
             )
         }
 
         composable(
-            route = "${Screens.car_editor}?carId={carId}",
+            route = "${Screens.CarEditor}?carId={carId}",
             arguments = listOf(navArgument("carId") { defaultValue = "" })
         ) {
             CarEditorScreen(
                 navBack = {
                     navController.popBackStack()
+                },
+                onSave = {
+                    navController.navigate(Screens.Home) {
+                        popUpTo(Screens.CarPicker) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

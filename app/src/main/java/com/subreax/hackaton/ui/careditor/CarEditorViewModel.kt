@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.subreax.hackaton.data.CarPart
 import com.subreax.hackaton.data.car.CarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -27,6 +29,9 @@ class CarEditorViewModel @Inject constructor(
 
     var title by mutableStateOf("")
         private set
+
+    private val _onSave = MutableSharedFlow<Boolean>()
+    val onSave: SharedFlow<Boolean> = _onSave
 
     init {
         val carId = savedStateHandle.get<String>("carId")
@@ -54,6 +59,8 @@ class CarEditorViewModel @Inject constructor(
     }
 
     fun save() {
-
+        viewModelScope.launch {
+            _onSave.emit(true)
+        }
     }
 }

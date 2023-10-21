@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.subreax.hackaton.ui.theme.HackatonTheme
@@ -26,7 +27,7 @@ import kotlin.math.roundToInt
 @Composable
 fun BasePartItem(
     name: String,
-    typeIconUrl: URL?,
+    typeIcon: @Composable () -> Unit,
     health: Float,
     modifier: Modifier = Modifier,
     trailingIcon: @Composable () -> Unit = {}
@@ -36,15 +37,7 @@ fun BasePartItem(
         modifier = modifier.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (typeIconUrl != null) {
-            AsyncImage(
-                model = typeIconUrl.toString(),
-                contentDescription = "",
-                modifier = Modifier.size(36.dp)
-            )
-        } else {
-            Icon(Icons.Filled.Construction, "", modifier = Modifier.size(36.dp))
-        }
+        typeIcon()
 
         Column(Modifier.weight(1f)) {
             Row(Modifier.fillMaxWidth()) {
@@ -68,6 +61,34 @@ fun BasePartItem(
 
         trailingIcon()
     }
+}
+
+@Composable
+fun BasePartItem(
+    name: String,
+    typeIconUrl: URL?,
+    typeIconSize: Dp = 36.dp,
+    health: Float,
+    modifier: Modifier = Modifier,
+    trailingIcon: @Composable () -> Unit = {}
+) {
+    BasePartItem(
+        name = name,
+        typeIcon = {
+            if (typeIconUrl != null) {
+                AsyncImage(
+                    model = typeIconUrl.toString(),
+                    contentDescription = "",
+                    modifier = Modifier.size(typeIconSize)
+                )
+            } else {
+                Icon(Icons.Filled.Construction, "", modifier = Modifier.size(typeIconSize))
+            }
+        },
+        health = health,
+        modifier = modifier,
+        trailingIcon = trailingIcon
+    )
 }
 
 

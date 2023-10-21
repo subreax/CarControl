@@ -4,7 +4,6 @@ import com.subreax.hackaton.data.auth.AuthRepository
 import com.subreax.hackaton.data.auth.SignInData
 import com.subreax.hackaton.data.auth.SignUpData
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -13,7 +12,7 @@ class MockAuthRepository @Inject constructor(): AuthRepository {
 
     override suspend fun signIn(data: SignInData) {
         withContext(Dispatchers.IO) {
-            delay(1000)
+            //delay(1000)
             if (data.email == "throw@gmail.com") {
                 throw Exception("Неправильный email или пароль")
             }
@@ -23,7 +22,7 @@ class MockAuthRepository @Inject constructor(): AuthRepository {
 
     override suspend fun signUp(data: SignUpData) {
         withContext(Dispatchers.IO) {
-            delay(1000)
+            //delay(1000)
             if (data.email == "throw@gmail.com") {
                 throw Exception("Ошибка")
             }
