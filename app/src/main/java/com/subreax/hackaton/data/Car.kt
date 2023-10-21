@@ -6,7 +6,7 @@ data class Car(
     val id: UUID,
     val name: String,
     val parts: List<CarPart>,
-    val mileage: Double,
+    var mileage: Float,
     val type: Type
 ) {
     enum class Type {

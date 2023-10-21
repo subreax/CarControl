@@ -67,9 +67,9 @@ fun BasePartItem(
 fun BasePartItem(
     name: String,
     typeIconUrl: URL?,
-    typeIconSize: Dp = 36.dp,
     health: Float,
     modifier: Modifier = Modifier,
+    typeIconSize: Dp = 36.dp,
     trailingIcon: @Composable () -> Unit = {}
 ) {
     BasePartItem(

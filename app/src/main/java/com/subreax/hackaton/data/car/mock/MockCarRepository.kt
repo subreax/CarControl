@@ -55,13 +55,15 @@ class MockCarRepository @Inject constructor(
                         Date(),
                         Date(System.currentTimeMillis() + 1000000)
                     )
-                ), 0.0, Car.Type.Passenger
+                ), 0f, Car.Type.Passenger
             ),
-            Car(UUID.randomUUID(), "Hyundai Solaris", emptyList(), 0.0, Car.Type.Passenger),
-            Car(UUID.randomUUID(), "Mazda RX-8", emptyList(), 0.0, Car.Type.Passenger),
-            Car(UUID.randomUUID(), "Lada X-Ray", emptyList(), 0.0, Car.Type.Passenger),
+            Car(UUID.randomUUID(), "Hyundai Solaris", emptyList(), 0f, Car.Type.Passenger),
+            Car(UUID.randomUUID(), "Mazda RX-8", emptyList(), 0f, Car.Type.Passenger),
+            Car(UUID.randomUUID(), "Lada X-Ray", emptyList(), 0f, Car.Type.Passenger),
         )
     }
+
+    private val cars = mutableListOf(templateCars[0])
 
     override suspend fun getCarTemplates(): List<Car> {
         return withContext(Dispatchers.IO) {
@@ -70,7 +72,19 @@ class MockCarRepository @Inject constructor(
         }
     }
 
-    override suspend fun getTemplateCarById(id: UUID): Car? {
+    override suspend fun getCarTemplateById(id: UUID): Car? {
         return templateCars.find { it.id == id }?.getNewCar()
+    }
+
+    override suspend fun getCars(): List<Car> {
+        return cars
+    }
+
+    override suspend fun updateCarMileage(car: Car, mileage: Float) {
+
+    }
+
+    override suspend fun addCar(car: Car) {
+        cars.add(car)
     }
 }

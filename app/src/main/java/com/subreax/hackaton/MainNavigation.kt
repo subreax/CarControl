@@ -28,7 +28,7 @@ fun MainNavigation(
     locationTrackerServiceController: LocationTrackerServiceController,
     navController: NavHostController = rememberNavController()
 ) {
-    NavHost(navController = navController, startDestination = Screens.Welcome) {
+    NavHost(navController = navController, startDestination = Screens.Home) {
         composable(Screens.Welcome) {
             WelcomeScreen(
                 signInClicked = {
