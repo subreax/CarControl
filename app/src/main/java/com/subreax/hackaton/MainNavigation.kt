@@ -9,10 +9,12 @@ import com.subreax.hackaton.service.LocationTrackerServiceController
 import com.subreax.hackaton.ui.WelcomeScreen
 import com.subreax.hackaton.ui.home.HomeScreen
 import com.subreax.hackaton.ui.signin.SignInScreen
+import com.subreax.hackaton.ui.signup.SignUpScreen
 
 private object Screens {
     const val welcome = "welcome"
-    const val signIn = "sign_in"
+    const val signIn = "sign-in"
+    const val signUp = "sign-up"
     const val home = "home"
 }
 
@@ -28,15 +30,39 @@ fun MainNavigation(
                     navController.navigate(Screens.signIn)
                 },
                 signUpClicked = {
-
+                    navController.navigate(Screens.signUp)
                 }
             )
         }
 
         composable(Screens.signIn) {
-            SignInScreen(navBack = {
-                navController.popBackStack()
-            })
+            SignInScreen(
+                navBack = {
+                    navController.popBackStack()
+                },
+                navHome = {
+                    navController.navigate(Screens.home) {
+                        popUpTo(Screens.welcome) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
+        composable(Screens.signUp) {
+            SignUpScreen(
+                navBack = {
+                    navController.popBackStack()
+                },
+                navHome = {
+                    navController.navigate(Screens.home) {
+                        popUpTo(Screens.welcome) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable(Screens.home) {

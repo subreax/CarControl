@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,17 +27,26 @@ import com.subreax.hackaton.ui.PasswordTextField
 @Composable
 fun SignInScreen(
     navBack: () -> Unit,
+    navHome: () -> Unit,
     signInViewModel: SignInViewModel = hiltViewModel()
 ) {
     SignInScreen(
-        username = signInViewModel.username,
+        email = signInViewModel.email,
         password = signInViewModel.password,
         error = signInViewModel.error,
-        onUsernameUpdated = signInViewModel::updateUsername,
+        signInEnabled = signInViewModel.signInButtonEnabled,
+        onEmailUpdated = signInViewModel::updateEmail,
         onPasswordUpdated = signInViewModel::updatePassword,
         navBack = navBack,
         signInClicked = signInViewModel::signIn
     )
+
+    LaunchedEffect(signInViewModel.eventNavHomeScreen) {
+        if (signInViewModel.eventNavHomeScreen) {
+            navHome()
+            signInViewModel.navHomeScreenHandled()
+        }
+    }
 }
 
 private val horizontalPadding = Modifier.padding(horizontal = 16.dp)
@@ -44,10 +54,11 @@ private val horizontalPadding = Modifier.padding(horizontal = 16.dp)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
-    username: String,
+    email: String,
     password: String,
     error: String,
-    onUsernameUpdated: (String) -> Unit,
+    signInEnabled: Boolean,
+    onEmailUpdated: (String) -> Unit,
     onPasswordUpdated: (String) -> Unit,
     navBack: () -> Unit,
     signInClicked: () -> Unit
@@ -63,7 +74,6 @@ fun SignInScreen(
             ) {
                 Icon(Icons.Filled.ArrowBack, "Вернуться назад")
             }
-
             Text(
                 text = "Вход",
                 style = MaterialTheme.typography.headlineLarge,
@@ -71,24 +81,37 @@ fun SignInScreen(
             )
             Spacer(Modifier.height(16.dp))
 
+
+
+
             OutlinedTextField(
-                value = username,
-                onValueChange = onUsernameUpdated,
+                value = email,
+                onValueChange = onEmailUpdated,
                 label = {
-                    Text(text = "Имя пользователя")
+                    Text(text = "Почта")
                 },
                 singleLine = true,
                 modifier = horizontalPadding
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             )
+
             PasswordTextField(
                 password = password,
                 onPasswordUpdated = onPasswordUpdated,
-                modifier = horizontalPadding.fillMaxWidth().padding(bottom = 8.dp)
+                modifier = horizontalPadding
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
             )
 
-            Button(onClick = signInClicked, modifier = Modifier.align(CenterHorizontally)) {
+
+
+
+            Button(
+                onClick = signInClicked,
+                modifier = Modifier.align(CenterHorizontally),
+                enabled = signInEnabled
+            ) {
                 Text(text = "Войти")
             }
 
