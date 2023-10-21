@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -32,7 +33,6 @@ fun CarEditorScreen(
     navBack: () -> Unit,
     carEditorViewModel: CarEditorViewModel = hiltViewModel()
 ) {
-
     CarEditorScreen(
         carName = carEditorViewModel.carName,
         onCarNameUpdated = carEditorViewModel::updateCarName,
@@ -99,8 +99,11 @@ fun CarEditorScreenContent(
                 onValueChange = onCarNameUpdated,
                 label = { Text("Название") },
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .fillMaxWidth(),
+                leadingIcon = {
+                    Icon(Icons.Filled.DirectionsCar, contentDescription = "")
+                }
             )
         }
 
