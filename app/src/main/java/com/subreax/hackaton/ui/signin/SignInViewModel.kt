@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.subreax.hackaton.data.user.auth.AuthRepository
 import com.subreax.hackaton.data.user.auth.SignInData
+import com.subreax.hackaton.ui.Validators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun updateSignInButtonState() {
-        signInButtonEnabled = email.isNotEmpty() && password.isNotEmpty()
+        signInButtonEnabled = Validators.isEmailCorrect(email) && password.length > 5
     }
 
     fun signIn() {

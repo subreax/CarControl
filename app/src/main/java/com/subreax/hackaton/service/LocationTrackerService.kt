@@ -48,8 +48,10 @@ class LocationTrackerService : Service() {
     private fun start() {
         updateNotification()
 
-        val locationRequest = LocationRequest.Builder(2000)
-            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+            .setMinUpdateDistanceMeters(0.5f)
+            .setMinUpdateIntervalMillis(500)
+            .setWaitForAccurateLocation(true)
             .build()
 
         locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
@@ -75,7 +77,7 @@ class LocationTrackerService : Service() {
 
     private fun onLocationUpdated(location: LocationResult) {
         lastLocation?.let {
-            if (location.lastLocation!!.speed > 1) {
+            if (location.lastLocation!!.speed > 0.5f) {
                 distanceTraveled += location.distanceTo(it)
                 updateNotification()
             }

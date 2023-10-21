@@ -14,7 +14,7 @@ class MockAuthRepository @Inject constructor(): AuthRepository {
     override suspend fun signIn(data: SignInData) {
         withContext(Dispatchers.IO) {
             delay(1000)
-            if (data.email == "throw") {
+            if (data.email == "throw@gmail.com") {
                 throw Exception("Неправильный email или пароль")
             }
             isAuthorized = true
@@ -24,7 +24,7 @@ class MockAuthRepository @Inject constructor(): AuthRepository {
     override suspend fun signUp(data: SignUpData) {
         withContext(Dispatchers.IO) {
             delay(1000)
-            if (data.email == "throw") {
+            if (data.email == "throw@gmail.com") {
                 throw Exception("Ошибка")
             }
             isAuthorized = true
