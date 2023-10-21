@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.subreax.hackaton.service.LocationTrackerServiceController
 import com.subreax.hackaton.ui.WelcomeScreen
 import com.subreax.hackaton.ui.careditor.CarEditorScreen
@@ -73,17 +74,29 @@ fun MainNavigation(
             HomeScreen(locationTrackerServiceController)
         }
 
-        composable(Screens.car_editor) {
-            CarEditorScreen(title = "Создание машины")
-        }
-
         composable(Screens.car_picker) {
             CarPickerScreen(
                 navBack = {
                     navController.popBackStack() // TODO: если это последний экран - произойдёт выход
                 },
                 onCarPicked = {
+                    if (it != null) {
+                        navController.navigate("${Screens.car_editor}?carId=${it.id}")
+                    }
+                    else {
+                        navController.navigate(Screens.car_editor)
+                    }
+                }
+            )
+        }
 
+        composable(
+            route = "${Screens.car_editor}?carId={carId}",
+            arguments = listOf(navArgument("carId") { defaultValue = "" })
+        ) {
+            CarEditorScreen(
+                navBack = {
+                    navController.popBackStack()
                 }
             )
         }

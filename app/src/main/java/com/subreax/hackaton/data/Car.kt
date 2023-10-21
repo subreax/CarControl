@@ -12,4 +12,10 @@ data class Car(
     enum class Type {
         Passenger, Truck
     }
+
+    fun getNewCar(): Car {
+        return copy(
+            parts = parts.map { it.getNew() }
+        )
+    }
 }
