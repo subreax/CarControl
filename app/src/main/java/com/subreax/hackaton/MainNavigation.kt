@@ -13,14 +13,15 @@ import com.subreax.hackaton.ui.carpicker.CarPickerScreen
 import com.subreax.hackaton.ui.home.HomeScreen
 import com.subreax.hackaton.ui.signin.SignInScreen
 import com.subreax.hackaton.ui.signup.SignUpScreen
+import timber.log.Timber
 
 private object Screens {
     const val welcome = "welcome"
     const val signIn = "sign-in"
     const val signUp = "sign-up"
     const val home = "home"
-    const val car_editor = "car-editor"
     const val car_picker = "car-picker"
+    const val car_editor = "car-editor"
 }
 
 @Composable
@@ -28,7 +29,7 @@ fun MainNavigation(
     locationTrackerServiceController: LocationTrackerServiceController,
     navController: NavHostController = rememberNavController()
 ) {
-    NavHost(navController = navController, startDestination = Screens.car_picker) {
+    NavHost(navController = navController, startDestination = Screens.welcome) {
         composable(Screens.welcome) {
             WelcomeScreen(
                 signInClicked = {
@@ -51,6 +52,13 @@ fun MainNavigation(
                             inclusive = true
                         }
                     }
+                },
+                navToCarPicker = {
+                    navController.navigate(Screens.car_picker) {
+                        popUpTo(Screens.welcome) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
@@ -61,7 +69,7 @@ fun MainNavigation(
                     navController.popBackStack()
                 },
                 navHome = {
-                    navController.navigate(Screens.home) {
+                    navController.navigate(Screens.car_picker) {
                         popUpTo(Screens.welcome) {
                             inclusive = true
                         }
@@ -75,17 +83,18 @@ fun MainNavigation(
         }
 
         composable(Screens.car_picker) {
+            val hasParentScreen = navController.previousBackStackEntry != null
+            Timber.d("$hasParentScreen")
             CarPickerScreen(
+                showButtonBack = hasParentScreen,
                 navBack = {
-                    navController.popBackStack() // TODO: если это последний экран - произойдёт выход
+                    navController.popBackStack()
                 },
-                onCarPicked = {
-                    if (it != null) {
-                        navController.navigate("${Screens.car_editor}?carId=${it.id}")
-                    }
-                    else {
-                        navController.navigate(Screens.car_editor)
-                    }
+                navToCarEditor = {
+                    navController.navigate("${Screens.car_editor}?carId=${it.id}")
+                },
+                navToCarBuilder = {
+                    navController.navigate(Screens.car_editor)
                 }
             )
         }

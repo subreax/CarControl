@@ -34,11 +34,11 @@ fun CarEditorScreen(
     carEditorViewModel: CarEditorViewModel = hiltViewModel()
 ) {
     CarEditorScreen(
+        title = carEditorViewModel.title,
         carName = carEditorViewModel.carName,
         onCarNameUpdated = carEditorViewModel::updateCarName,
         parts = carEditorViewModel.parts,
         onPartRemoveClicked = carEditorViewModel::deletePart,
-        title = carEditorViewModel.title,
         navBack = navBack
     )
 }
@@ -46,11 +46,11 @@ fun CarEditorScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarEditorScreen(
+    title: String,
     carName: String,
     onCarNameUpdated: (String) -> Unit,
     parts: List<CarPart>,
     onPartRemoveClicked: (CarPart) -> Unit,
-    title: String,
     navBack: () -> Unit
 ) {
     Scaffold(
@@ -103,7 +103,8 @@ fun CarEditorScreenContent(
                     .fillMaxWidth(),
                 leadingIcon = {
                     Icon(Icons.Filled.DirectionsCar, contentDescription = "")
-                }
+                },
+                maxLines = 1
             )
         }
 

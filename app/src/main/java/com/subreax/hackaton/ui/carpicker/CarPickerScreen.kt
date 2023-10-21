@@ -39,8 +39,10 @@ private val carItemModifier = Modifier
 
 @Composable
 fun CarPickerScreen(
+    showButtonBack: Boolean,
     navBack: () -> Unit,
-    onCarPicked: (Car?) -> Unit,
+    navToCarEditor: (Car) -> Unit,
+    navToCarBuilder: () -> Unit,
     carPickerViewModel: CarPickerViewModel = hiltViewModel()
 ) {
     val cars = carPickerViewModel.cars
@@ -49,9 +51,10 @@ fun CarPickerScreen(
         cars = cars,
         search = carPickerViewModel.searchValue,
         onSearchUpdated = carPickerViewModel::updateSearch,
+        showButtonBack = showButtonBack,
         navBack = navBack,
-        onCarPicked = onCarPicked,
-        onCreateNewCar = { onCarPicked(null) }
+        onCarPicked = navToCarEditor,
+        onCreateNewCar = navToCarBuilder
     )
 }
 
@@ -61,6 +64,7 @@ fun CarPickerScreen(
     cars: List<Car>,
     search: String,
     onSearchUpdated: (String) -> Unit,
+    showButtonBack: Boolean,
     navBack: () -> Unit,
     onCarPicked: (Car) -> Unit,
     onCreateNewCar: () -> Unit
@@ -69,14 +73,22 @@ fun CarPickerScreen(
         Column(Modifier.fillMaxSize()) {
             TopAppBar(
                 title = {
-                    Text("Выбор машины")
+                    Text("Создание новой машины")
                 },
                 navigationIcon = {
-                    IconButton(onClick = navBack) {
-                        Icon(Icons.Filled.ArrowBack, "Вернуться назад")
+                    if (showButtonBack) {
+                        IconButton(onClick = navBack) {
+                            Icon(Icons.Filled.ArrowBack, "Вернуться назад")
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
+            )
+
+            Text(
+                text = "Создайте машину, за которой будет осуществляться автоматизированный контроль",
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             OutlinedTextField(
@@ -90,7 +102,8 @@ fun CarPickerScreen(
                 },
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                maxLines = 1
             )
 
             if (cars.isNotEmpty()) {
@@ -137,7 +150,7 @@ fun ThereIsNoCarButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "Создайте её сами!",
+                    text = "Соберите её сами!",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline
                 )

@@ -29,8 +29,8 @@ class CarEditorViewModel @Inject constructor(
         private set
 
     init {
-        val carId = savedStateHandle.get<String>("carId")!!
-        if (carId.isNotEmpty()) {
+        val carId = savedStateHandle.get<String>("carId")
+        if (!carId.isNullOrEmpty()) {
             title = "Редактирование машины"
 
             viewModelScope.launch {
@@ -41,7 +41,7 @@ class CarEditorViewModel @Inject constructor(
             }
         }
         else {
-            title = "Создание машины"
+            title = "Сборка машины"
         }
     }
 

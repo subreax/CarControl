@@ -3,9 +3,9 @@ package com.subreax.hackaton.di
 import com.subreax.hackaton.data.car.CarRepository
 import com.subreax.hackaton.data.car.mock.MockCarRepository
 import com.subreax.hackaton.data.user.UserRepository
-import com.subreax.hackaton.data.user.auth.AuthRepository
-import com.subreax.hackaton.data.user.auth.mock.MockAuthRepository
-import com.subreax.hackaton.data.user.impl.UserRepositoryImpl
+import com.subreax.hackaton.data.auth.AuthRepository
+import com.subreax.hackaton.data.auth.mock.MockAuthRepository
+import com.subreax.hackaton.data.user.mock.MockUserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,7 +21,7 @@ abstract class GeneralModule {
 
     @Binds
     @Singleton
-    abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
+    abstract fun bindUserRepository(impl: MockUserRepository): UserRepository
 
     @Binds
     @Singleton

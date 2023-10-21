@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.subreax.hackaton.data.user.auth.AuthRepository
-import com.subreax.hackaton.data.user.auth.SignInData
+import com.subreax.hackaton.data.user.UserRepository
+import com.subreax.hackaton.data.auth.AuthRepository
+import com.subreax.hackaton.data.auth.SignInData
 import com.subreax.hackaton.ui.Validators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,8 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
+    enum class NavEvent {
+        None, NavHome, NavToCarPicker
+    }
+
     var email by mutableStateOf("")
         private set
 
@@ -28,7 +34,7 @@ class SignInViewModel @Inject constructor(
     var error by mutableStateOf("")
         private set
 
-    var eventNavHomeScreen by mutableStateOf(false)
+    var navEvent by mutableStateOf(NavEvent.None)
         private set
 
     fun updateEmail(newUsername: String) {
@@ -50,14 +56,22 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 authRepository.signIn(SignInData(email, password))
-                eventNavHomeScreen = true
+                navEvent = if (isUserHasACar()) {
+                    NavEvent.NavHome
+                } else {
+                    NavEvent.NavToCarPicker
+                }
             } catch (ex: Exception) {
                 error = ex.message ?: "Неизвестная ошибка"
             }
         }
     }
 
-    fun navHomeScreenHandled() {
-        eventNavHomeScreen = false
+    private suspend fun isUserHasACar(): Boolean {
+        return userRepository.hasAtLeastOneCar()
+    }
+
+    fun resetNavEvent() {
+        navEvent = NavEvent.None
     }
 }

@@ -30,6 +30,7 @@ import com.subreax.hackaton.ui.PasswordTextField
 fun SignInScreen(
     navBack: () -> Unit,
     navHome: () -> Unit,
+    navToCarPicker: () -> Unit,
     signInViewModel: SignInViewModel = hiltViewModel()
 ) {
     SignInScreen(
@@ -43,10 +44,14 @@ fun SignInScreen(
         signInClicked = signInViewModel::signIn
     )
 
-    LaunchedEffect(signInViewModel.eventNavHomeScreen) {
-        if (signInViewModel.eventNavHomeScreen) {
+    LaunchedEffect(signInViewModel.navEvent) {
+        if (signInViewModel.navEvent == SignInViewModel.NavEvent.NavHome) {
             navHome()
-            signInViewModel.navHomeScreenHandled()
+            signInViewModel.resetNavEvent()
+        }
+        else if (signInViewModel.navEvent == SignInViewModel.NavEvent.NavToCarPicker) {
+            navToCarPicker()
+            signInViewModel.resetNavEvent()
         }
     }
 }

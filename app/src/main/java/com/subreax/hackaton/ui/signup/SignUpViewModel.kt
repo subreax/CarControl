@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.subreax.hackaton.data.user.auth.AuthRepository
-import com.subreax.hackaton.data.user.auth.SignUpData
+import com.subreax.hackaton.data.auth.AuthRepository
+import com.subreax.hackaton.data.auth.SignUpData
 import com.subreax.hackaton.ui.Validators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

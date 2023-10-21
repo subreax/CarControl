@@ -1,4 +1,4 @@
-package com.subreax.hackaton.data.user.impl
+package com.subreax.hackaton.data.user.mock
 
 import com.subreax.hackaton.data.user.User
 import com.subreax.hackaton.data.user.UserRepository
@@ -7,9 +7,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor() : UserRepository {
+class MockUserRepository @Inject constructor() : UserRepository {
     override suspend fun getUser(): User = withContext(Dispatchers.IO) {
-        delay(1500)
+        delay(1)
         User("123456", "subreax")
+    }
+
+    override suspend fun hasAtLeastOneCar(): Boolean {
+        return false
     }
 }

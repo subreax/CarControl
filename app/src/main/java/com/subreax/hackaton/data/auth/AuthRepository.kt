@@ -1,4 +1,4 @@
-package com.subreax.hackaton.data.user.auth
+package com.subreax.hackaton.data.auth
 
 interface AuthRepository {
     suspend fun signIn(data: SignInData)
