@@ -5,7 +5,7 @@ import java.util.UUID
 data class Car(
     val id: UUID,
     val name: String,
-    val parts: List<CarPart>,
+    val parts: List<Part2>,
     var mileage: Float,
     val type: Type
 ) {
@@ -15,8 +15,15 @@ data class Car(
 
     fun getNewCar(): Car {
         return copy(
-            parts = parts.map { it.getNew() }
+            parts = parts.map { it.getNew(mileage) }
         )
+    }
+
+    fun updateMileage(newMileage: Float) {
+        mileage = newMileage
+        parts.forEach {
+            it.calcHealth(mileage)
+        }
     }
 }
 

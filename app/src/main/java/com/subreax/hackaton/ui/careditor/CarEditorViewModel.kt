@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.subreax.hackaton.data.CarPart
+import com.subreax.hackaton.data.Part2
 import com.subreax.hackaton.data.car.CarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,8 +21,8 @@ class CarEditorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val carRepository: CarRepository
 ) : ViewModel() {
-    private var _parts = mutableStateListOf<CarPart>()
-    val parts: List<CarPart> = _parts
+    private var _parts = mutableStateListOf<Part2>()
+    val parts: List<Part2> = _parts
 
     var carName by mutableStateOf("")
         private set
@@ -54,7 +54,7 @@ class CarEditorViewModel @Inject constructor(
         carName = newName
     }
 
-    fun deletePart(part: CarPart) {
+    fun deletePart(part: Part2) {
         _parts.removeIf { it.id == part.id }
     }
 

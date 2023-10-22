@@ -10,16 +10,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.subreax.hackaton.ServiceUtils
 import com.subreax.hackaton.data.Car
-import com.subreax.hackaton.data.CarPart
+import com.subreax.hackaton.data.Part2
 import com.subreax.hackaton.data.car.CarRepository
 import com.subreax.hackaton.data.mileage.MileageRepository
 import com.subreax.hackaton.service.LocationTrackerService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -29,7 +27,7 @@ class HomeViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val mileageRepository: MileageRepository
 ) : ViewModel() {
-    var parts by mutableStateOf<List<CarPart>>(emptyList())
+    var parts by mutableStateOf<List<Part2>>(emptyList())
         private set
 
     var carName by mutableStateOf("")
@@ -72,9 +70,18 @@ class HomeViewModel @Inject constructor(
         isButtonActive = true
         mileageJob = viewModelScope.launch {
             mileageRepository.trackMileage(cars[0]).collect {
-                carMileage = it
+                updateCarMileage(it)
             }
+            /*while (isActive) {
+                updateCarMileage(cars[0].mileage + 1000)
+                delay(500)
+            }*/
         }
+    }
+
+    fun updateCarMileage(newMileage: Float) {
+        carMileage = newMileage
+        cars[0].updateMileage(carMileage)
     }
 
     fun stopMileageTracking() {

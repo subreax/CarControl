@@ -6,7 +6,6 @@ import com.subreax.hackaton.data.CarPartGroup
 import com.subreax.hackaton.data.CarTemplate
 import com.subreax.hackaton.data.auth.AuthRepository
 import com.subreax.hackaton.data.car.CarRepository
-import com.subreax.hackaton.data.retrofit.NetworkCar
 import com.subreax.hackaton.data.retrofit.NetworkPart
 import com.subreax.hackaton.data.retrofit.RetrofitService
 import kotlinx.coroutines.Dispatchers
@@ -78,7 +77,8 @@ class CarRepositoryImpl @Inject constructor(
         return Car(
             networkCar.uniqueId,
             networkCar.name,
-            networkParts.map { it.toPart() },
+            //networkParts.map { it.toPart() },
+            emptyList(),
             networkCar.mileageInKilometers * 1000.0f,
             networkCar.typeKey.toCarType()
         ).also {

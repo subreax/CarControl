@@ -55,9 +55,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.subreax.hackaton.R
-import com.subreax.hackaton.data.CarPart
+import com.subreax.hackaton.data.Part2
 import com.subreax.hackaton.service.LocationTrackerServiceController
 import com.subreax.hackaton.ui.BasePartItem
+import com.subreax.hackaton.ui.FloatEditorDialog
 import com.subreax.hackaton.ui.Title
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -72,6 +73,24 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     Surface(Modifier.fillMaxSize()) {
+        var isDialogShown by remember { mutableStateOf(false) }
+
+        if (isDialogShown) {
+            FloatEditorDialog(
+                propertyName = "Пробег",
+                value = homeViewModel.carMileage / 1000,
+                min = 0f,
+                max = 1000000f,
+                onSubmit = {
+                    homeViewModel.updateCarMileage(it * 1000)
+                    isDialogShown = false
+                },
+                onClose = {
+                    isDialogShown = false
+                }
+            )
+        }
+
         HomeDrawer(
             drawerState = drawerState,
             carNames = homeViewModel.carNames
@@ -99,13 +118,15 @@ fun HomeScreen(
                                 locationTracker.startLocationTracker(id)
                                 homeViewModel.startMileageTracking()
                             }
-                        }
-                        else {
+                        } else {
                             locationTracker.stopLocationTracker()
                             homeViewModel.stopMileageTracking()
                         }
                     },
-                    parts = homeViewModel.parts
+                    parts = homeViewModel.parts,
+                    onEditMileageClicked = {
+                        isDialogShown = true
+                    }
                 )
             }
         }
@@ -145,8 +166,11 @@ fun HomeScreenContent(
     mileage: Float,
     isMileageCounting: Boolean,
     onMileageToggled: (Boolean) -> Unit,
-    parts: List<CarPart>
+    onEditMileageClicked: () -> Unit,
+    parts: List<Part2>
 ) {
+
+
     LazyColumn {
         item {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -159,7 +183,7 @@ fun HomeScreenContent(
 
                 MileageLabel(
                     mileage = mileage,
-                    onEditClicked = { /*TODO*/ }
+                    onEditClicked = onEditMileageClicked
                 )
             }
         }
@@ -251,6 +275,7 @@ fun DrawerHeader() {
             text = "Выбор машины",
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge,
+            color = Color(0xFFE4E4E4),
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.BottomStart)

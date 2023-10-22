@@ -1,19 +1,18 @@
 package com.subreax.hackaton.data.car.mock
 
 import com.subreax.hackaton.data.Car
-import com.subreax.hackaton.data.CarPart
 import com.subreax.hackaton.data.CarPartGroup
 import com.subreax.hackaton.data.CarTemplate
+import com.subreax.hackaton.data.Part2
 import com.subreax.hackaton.data.car.CarRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import com.subreax.hackaton.data.mileage.LocalMileageDataSource
 import java.net.URL
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
 class MockCarRepository @Inject constructor(
+    private val localMileageDataSource: LocalMileageDataSource
 ) : CarRepository {
     private val settingsIcon =
         URL("https://upload.wikimedia.org/wikipedia/commons/3/39/Icons8_flat_settings.svg")
@@ -36,25 +35,23 @@ class MockCarRepository @Inject constructor(
         listOf(
             Car(
                 UUID.randomUUID(), "Kia Rio", listOf(
-                    CarPart(
-                        id = UUID.randomUUID(),
-                        name = "Масло",
+                    Part2(
+                        id = UUID.fromString("8f0ea524-214c-414b-bab2-d0c465f272b5"),
+                        name = "Масло 7к",
                         type = oil,
-                        500,
-                        230,
-                        10000000,
+                        0,
+                        7000 * 1000,
                         Date(),
-                        Date(System.currentTimeMillis() + 1000000)
+                        Date(System.currentTimeMillis() + 86400000)
                     ),
-                    CarPart(
+                    Part2(
                         id = UUID.randomUUID(),
-                        name = "Свечи",
+                        name = "Свечи 10к",
                         type = candles,
-                        500,
-                        500,
-                        10000000,
+                        0,
+                        10000 * 1000,
                         Date(),
-                        Date(System.currentTimeMillis() + 1000000)
+                        Date(System.currentTimeMillis() + 86400000)
                     )
                 ), 0f, Car.Type.Passenger
             ),
@@ -92,6 +89,7 @@ class MockCarRepository @Inject constructor(
 
     override suspend fun createCarFromTemplateById(id: UUID): Car {
         val car = templateCars.find { it.id == id }!!.getNewCar()
+        car.mileage = localMileageDataSource.loadMileage(id)
         addCar(car)
         return car
     }

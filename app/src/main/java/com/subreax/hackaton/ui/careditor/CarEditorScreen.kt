@@ -29,7 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.subreax.hackaton.data.CarPart
+import com.subreax.hackaton.data.Part2
 import com.subreax.hackaton.ui.BasePartItem
 import com.subreax.hackaton.ui.Title
 
@@ -64,8 +64,8 @@ fun CarEditorScreen(
     title: String,
     carName: String,
     onCarNameUpdated: (String) -> Unit,
-    parts: List<CarPart>,
-    onPartRemoveClicked: (CarPart) -> Unit,
+    parts: List<Part2>,
+    onPartRemoveClicked: (Part2) -> Unit,
     navBack: () -> Unit,
     onSaveClicked: () -> Unit
 ) {
@@ -98,8 +98,8 @@ fun CarEditorScreen(
 fun CarEditorScreenContent(
     carName: String,
     onCarNameUpdated: (String) -> Unit,
-    parts: List<CarPart>,
-    onPartRemoveClicked: (CarPart) -> Unit,
+    parts: List<Part2>,
+    onPartRemoveClicked: (Part2) -> Unit,
     onSaveClicked: () -> Unit
 ) {
     Column {
