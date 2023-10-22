@@ -29,28 +29,21 @@ interface RetrofitService {
         @Header("Authorization") token: String
     ): List<NetworkCarTemplate>
 
-    /*@GET("car_part/find_by_id")
-    suspend fun findPartTemplateById(
-        @Header("Authorization") token: String,
-        @Query("unique_id") id: UUID
-    ): NetworkPartTemplate*/
-
-
     @GET("custom_car/create_from_car")
     suspend fun createCarFromTemplate(
         @Header("Authorization") token: String,
-        @Query("unique_id") id: UUID
+        @Query("uniqueId") id: UUID
     ): NetworkCar
 
     @GET("custom_car_part/find_by_id")
     suspend fun findPartById(
         @Header("Authorization") token: String,
-        @Query("unique_id") id: UUID
+        @Query("uniqueId") id: UUID
     ): NetworkPart
 
     @GET("custom_car/find_by_id")
     suspend fun findCarById(
         @Header("Authorization") token: String,
-        @Query("unique_id") id: UUID
+        @Query("uniqueId") id: UUID
     ): NetworkCar?
 }

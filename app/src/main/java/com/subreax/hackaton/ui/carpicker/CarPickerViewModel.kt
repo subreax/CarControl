@@ -11,6 +11,8 @@ import com.subreax.hackaton.data.car.CarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -35,6 +37,9 @@ class CarPickerViewModel @Inject constructor(
     var cars = mutableStateListOf<UiCarTemplate>()
         private set
 
+    private val _navHome = MutableSharedFlow<UUID>()
+    val navHome: Flow<UUID> = _navHome
+
     init {
         viewModelScope.launch {
             val templates = carRepository.getCarTemplates()
@@ -55,6 +60,13 @@ class CarPickerViewModel @Inject constructor(
                 cars.clear()
                 cars.addAll(filtered)
             }
+        }
+    }
+
+    fun createCar(template: UiCarTemplate) {
+        viewModelScope.launch {
+            val car = carRepository.createCarFromTemplateById(template.id)
+            _navHome.emit(car.id)
         }
     }
 }

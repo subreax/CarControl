@@ -20,8 +20,8 @@ class HackatonApplication : Application(), ImageLoaderFactory {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "running-channel",
-                "Location Tracker",
+                "mileage-channel",
+                "Отслеживание пробега",
                 NotificationManager.IMPORTANCE_LOW
             )
 

@@ -7,6 +7,6 @@ interface MileageRepository {
     fun selectCar(car: Car)
     fun getSelectedCar(): Car?
 
-    fun increaseMileage(deltaMileageMeters: Float)
+    fun increaseMileage(deltaMileageMeters: Float): Float
     fun trackMileage(car: Car): Flow<Float>
 }

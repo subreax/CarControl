@@ -71,8 +71,6 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    var isMileageCounting by remember { mutableStateOf(false) }
-
     Surface(Modifier.fillMaxSize()) {
         HomeDrawer(
             drawerState = drawerState,
@@ -93,9 +91,20 @@ fun HomeScreen(
                 )
 
                 HomeScreenContent(
-                    mileage = 5.25f,
-                    isMileageCounting = isMileageCounting,
-                    onMileageToggled = { isMileageCounting = it },
+                    mileage = homeViewModel.carMileage / 1000,
+                    isMileageCounting = homeViewModel.isButtonActive,
+                    onMileageToggled = {
+                        if (it) {
+                            homeViewModel.carId?.let { id ->
+                                locationTracker.startLocationTracker(id)
+                                homeViewModel.startMileageTracking()
+                            }
+                        }
+                        else {
+                            locationTracker.stopLocationTracker()
+                            homeViewModel.stopMileageTracking()
+                        }
+                    },
                     parts = homeViewModel.parts
                 )
             }

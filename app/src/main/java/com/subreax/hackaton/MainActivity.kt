@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -87,9 +88,10 @@ class MainActivity : ComponentActivity(), LocationTrackerServiceController {
         )
     }
 
-    override fun startLocationTracker() {
+    override fun startLocationTracker(carId: UUID) {
         Intent(applicationContext, LocationTrackerService::class.java).also {
             it.action = LocationTrackerService.Actions.START.toString()
+            it.putExtra(LocationTrackerService.EXTRA_CAR_ID, carId.toString())
             startService(it)
         }
     }

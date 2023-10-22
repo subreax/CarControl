@@ -94,11 +94,16 @@ fun MainNavigation(
                 navBack = {
                     navController.popBackStack()
                 },
-                navToCarEditor = {
-                    navController.navigate("${Screens.CarEditor}?carId=${it.id}")
-                },
                 navToCarBuilder = {
                     navController.navigate(Screens.CarEditor)
+                },
+                navToCarEditor = {
+                    /*navController.navigate(Screens.Home) {
+                        popUpTo(Screens.CarPicker) {
+                            inclusive = true
+                        }
+                    }*/
+                    navController.navigate("${Screens.CarEditor}?carId=$it")
                 }
             )
         }

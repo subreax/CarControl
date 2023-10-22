@@ -42,7 +42,7 @@ class MockCarRepository @Inject constructor(
                         type = oil,
                         500,
                         230,
-                        1000000,
+                        10000000,
                         Date(),
                         Date(System.currentTimeMillis() + 1000000)
                     ),
@@ -52,7 +52,7 @@ class MockCarRepository @Inject constructor(
                         type = candles,
                         500,
                         500,
-                        1000000,
+                        10000000,
                         Date(),
                         Date(System.currentTimeMillis() + 1000000)
                     )
@@ -64,14 +64,10 @@ class MockCarRepository @Inject constructor(
         )
     }
 
-    private val cars = mutableListOf(templateCars[0])
+    private val cars = mutableListOf<Car>()
 
     override suspend fun getCarTemplates(): List<CarTemplate> {
-        /*return withContext(Dispatchers.IO) {
-            delay(1000)
-            templateCars
-        }*/
-        return emptyList()
+        return templateCars.map { CarTemplate(it.id, it.name, emptyList(), it.type) }
     }
 
     override suspend fun getCarById(id: UUID): Car? {
@@ -95,6 +91,8 @@ class MockCarRepository @Inject constructor(
     }
 
     override suspend fun createCarFromTemplateById(id: UUID): Car {
-        return templateCars[0] // todo: неправильно
+        val car = templateCars.find { it.id == id }!!.getNewCar()
+        addCar(car)
+        return car
     }
 }

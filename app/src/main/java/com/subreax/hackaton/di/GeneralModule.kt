@@ -7,6 +7,8 @@ import com.subreax.hackaton.data.auth.AuthRepository
 import com.subreax.hackaton.data.auth.impl.AuthRepositoryImpl
 import com.subreax.hackaton.data.auth.mock.MockAuthRepository
 import com.subreax.hackaton.data.car.impl.CarRepositoryImpl
+import com.subreax.hackaton.data.mileage.MileageRepository
+import com.subreax.hackaton.data.mileage.MileageRepositoryImpl
 import com.subreax.hackaton.data.user.mock.MockUserRepository
 import dagger.Binds
 import dagger.Module
@@ -27,5 +29,9 @@ abstract class GeneralModule {
 
     @Binds
     @Singleton
-    abstract fun bindCarRepository(impl: CarRepositoryImpl): CarRepository
+    abstract fun bindCarRepository(impl: MockCarRepository): CarRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMileageRepository(impl: MileageRepositoryImpl): MileageRepository
 }

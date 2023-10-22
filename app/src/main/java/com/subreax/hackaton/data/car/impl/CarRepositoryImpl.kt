@@ -11,6 +11,7 @@ import com.subreax.hackaton.data.retrofit.NetworkPart
 import com.subreax.hackaton.data.retrofit.RetrofitService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
@@ -20,7 +21,6 @@ class CarRepositoryImpl @Inject constructor(
     private val authRepository: AuthRepository
 ) : CarRepository {
     private var templates = listOf<CarTemplate>()
-    private var cachedNewCar: Car? = null
 
     private val settingsIcon =
         URL("https://upload.wikimedia.org/wikipedia/commons/3/39/Icons8_flat_settings.svg")
@@ -44,8 +44,7 @@ class CarRepositoryImpl @Inject constructor(
 
     override suspend fun createCarFromTemplateById(id: UUID): Car {
         val template = templates.find { it.id == id }!!
-        val car = template.toCar()
-        cachedNewCar = car
+        val car = createAndAddCar(template.id)
         return car
     }
 
@@ -69,33 +68,7 @@ class CarRepositoryImpl @Inject constructor(
         return false // todo
     }
 
-    private fun List<NetworkCar>.toModel(): List<Car> {
-
-
-        return map {
-            Car(it.uniqueId, it.name, emptyList(), 0f, Car.Type.Passenger)
-        }
-    }
-
-    /*private suspend fun findPartTemplateById(id: UUID): NetworkPartTemplate? {
-        return withContext(Dispatchers.IO) {
-            try {
-                retrofitService.findPartTemplateById(authRepository.getToken(), id)
-            } catch (ex: Exception) {
-                null
-            }
-        }
-    }*/
-
-    private fun String.toCarType(): Car.Type {
-        return if (this == "passenger_car") {
-            Car.Type.Passenger
-        } else {
-            Car.Type.Truck
-        }
-    }
-
-    private suspend fun CarTemplate.toCar(): Car {
+    private suspend fun createAndAddCar(id: UUID): Car {
         val networkCar = retrofitService.createCarFromTemplate(authRepository.getToken(), id)
 
         val networkParts = networkCar.parts.map {
@@ -108,7 +81,17 @@ class CarRepositoryImpl @Inject constructor(
             networkParts.map { it.toPart() },
             networkCar.mileageInKilometers * 1000.0f,
             networkCar.typeKey.toCarType()
-        )
+        ).also {
+            Timber.d("Car created. Id: ${it.id}")
+        }
+    }
+
+    private fun String.toCarType(): Car.Type {
+        return if (this == "passenger_car") {
+            Car.Type.Passenger
+        } else {
+            Car.Type.Truck
+        }
     }
 
     private suspend fun NetworkPart.toPart(): CarPart {
