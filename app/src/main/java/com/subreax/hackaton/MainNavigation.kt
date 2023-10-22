@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.subreax.hackaton.service.LocationTrackerServiceController
+import com.subreax.hackaton.ui.BlankScreen
 import com.subreax.hackaton.ui.WelcomeScreen
 import com.subreax.hackaton.ui.careditor.CarEditorScreen
 import com.subreax.hackaton.ui.carpicker.CarPickerScreen
@@ -14,7 +15,8 @@ import com.subreax.hackaton.ui.home.HomeScreen
 import com.subreax.hackaton.ui.signin.SignInScreen
 import com.subreax.hackaton.ui.signup.SignUpScreen
 
-private object Screens {
+object Screens {
+    const val Blank = "blank"
     const val Welcome = "welcome"
     const val SignIn = "sign-in"
     const val SignUp = "sign-up"
@@ -28,7 +30,11 @@ fun MainNavigation(
     locationTrackerServiceController: LocationTrackerServiceController,
     navController: NavHostController = rememberNavController()
 ) {
-    NavHost(navController = navController, startDestination = Screens.Home) {
+    NavHost(navController = navController, startDestination = Screens.Blank) {
+        composable(Screens.Blank) {
+            BlankScreen()
+        }
+
         composable(Screens.Welcome) {
             WelcomeScreen(
                 signInClicked = {

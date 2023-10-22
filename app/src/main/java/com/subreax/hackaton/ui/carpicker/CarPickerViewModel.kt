@@ -13,25 +13,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.UUID
 import javax.inject.Inject
+
+data class UiCarTemplate(
+    val id: UUID,
+    val name: String,
+    val type: Car.Type,
+)
 
 @HiltViewModel
 class CarPickerViewModel @Inject constructor(
     private val carRepository: CarRepository
 ) : ViewModel() {
-    private var _templates: List<Car> = emptyList()
+    private var _templates: List<UiCarTemplate> = emptyList()
     private var searchJob: Job = Job()
 
     var searchValue by mutableStateOf("")
         private set
 
-    var cars = mutableStateListOf<Car>()
+    var cars = mutableStateListOf<UiCarTemplate>()
         private set
 
     init {
         viewModelScope.launch {
             val templates = carRepository.getCarTemplates()
-            _templates = templates
+            _templates = templates.map { UiCarTemplate(it.id, it.name, it.type) }
             cars.addAll(_templates)
         }
     }

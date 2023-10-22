@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.subreax.hackaton.data.user.UserRepository
 import com.subreax.hackaton.data.auth.AuthRepository
 import com.subreax.hackaton.data.auth.SignInData
+import com.subreax.hackaton.data.car.CarRepository
 import com.subreax.hackaton.ui.Validators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val carRepository: CarRepository
 ) : ViewModel() {
     enum class NavEvent {
         None, NavHome, NavToCarPicker
@@ -55,7 +56,7 @@ class SignInViewModel @Inject constructor(
         error = ""
         viewModelScope.launch {
             try {
-                authRepository.signIn(SignInData(email, password))
+                authRepository.signIn(SignInData(email.trim(), password))
                 navEvent = if (isUserHasACar()) {
                     NavEvent.NavHome
                 } else {
@@ -68,7 +69,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private suspend fun isUserHasACar(): Boolean {
-        return userRepository.hasAtLeastOneCar()
+        return carRepository.hasAtLeastOneCar()
     }
 
     fun resetNavEvent() {

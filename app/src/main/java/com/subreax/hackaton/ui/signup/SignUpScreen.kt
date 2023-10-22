@@ -48,10 +48,10 @@ fun SignUpScreen(
         signInClicked = signUpViewModel::signUp
     )
 
-    LaunchedEffect(signUpViewModel.eventNavHomeScreen) {
-        if (signUpViewModel.eventNavHomeScreen) {
+    LaunchedEffect(signUpViewModel.eventNavNext) {
+        if (signUpViewModel.eventNavNext) {
             navHome()
-            signUpViewModel.navHomeScreenHandled()
+            signUpViewModel.navNextHandled()
         }
     }
 }

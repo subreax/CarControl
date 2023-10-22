@@ -41,7 +41,7 @@ private val carItemModifier = Modifier
 fun CarPickerScreen(
     showButtonBack: Boolean,
     navBack: () -> Unit,
-    navToCarEditor: (Car) -> Unit,
+    navToCarEditor: (UiCarTemplate) -> Unit,
     navToCarBuilder: () -> Unit,
     carPickerViewModel: CarPickerViewModel = hiltViewModel()
 ) {
@@ -61,12 +61,12 @@ fun CarPickerScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarPickerScreen(
-    cars: List<Car>,
+    cars: List<UiCarTemplate>,
     search: String,
     onSearchUpdated: (String) -> Unit,
     showButtonBack: Boolean,
     navBack: () -> Unit,
-    onCarPicked: (Car) -> Unit,
+    onCarPicked: (UiCarTemplate) -> Unit,
     onCreateNewCar: () -> Unit
 ) {
     Surface(Modifier.fillMaxSize()) {
@@ -161,7 +161,11 @@ fun ThereIsNoCarButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CarItem(car: Car, onClick: (Car) -> Unit, modifier: Modifier = Modifier) {
+fun CarItem(
+    car: UiCarTemplate,
+    onClick: (UiCarTemplate) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier

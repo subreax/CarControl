@@ -19,3 +19,10 @@ data class Car(
         )
     }
 }
+
+data class CarTemplate(
+    val id: UUID,
+    val name: String,
+    val parts: List<UUID>,
+    val type: Car.Type
+)

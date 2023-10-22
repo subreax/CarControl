@@ -4,7 +4,9 @@ import com.subreax.hackaton.data.car.CarRepository
 import com.subreax.hackaton.data.car.mock.MockCarRepository
 import com.subreax.hackaton.data.user.UserRepository
 import com.subreax.hackaton.data.auth.AuthRepository
+import com.subreax.hackaton.data.auth.impl.AuthRepositoryImpl
 import com.subreax.hackaton.data.auth.mock.MockAuthRepository
+import com.subreax.hackaton.data.car.impl.CarRepositoryImpl
 import com.subreax.hackaton.data.user.mock.MockUserRepository
 import dagger.Binds
 import dagger.Module
@@ -17,7 +19,7 @@ import javax.inject.Singleton
 abstract class GeneralModule {
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(impl: MockAuthRepository): AuthRepository
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
@@ -25,5 +27,5 @@ abstract class GeneralModule {
 
     @Binds
     @Singleton
-    abstract fun bindCarRepository(impl: MockCarRepository): CarRepository
+    abstract fun bindCarRepository(impl: CarRepositoryImpl): CarRepository
 }

@@ -30,9 +30,9 @@ class MockAuthRepository @Inject constructor(): AuthRepository {
         }
     }
 
-    override suspend fun isAuthorized() = isAuthorized
+    override fun isAuthorized() = isAuthorized
 
-    override suspend fun getToken(): String {
+    override fun getToken(): String {
         return "mock_token"
     }
 }

@@ -12,8 +12,4 @@ class MockUserRepository @Inject constructor() : UserRepository {
         delay(1)
         User("123456", "subreax")
     }
-
-    override suspend fun hasAtLeastOneCar(): Boolean {
-        return false
-    }
 }

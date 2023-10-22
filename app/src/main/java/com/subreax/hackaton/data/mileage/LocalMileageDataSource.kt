@@ -1,4 +1,4 @@
-package com.subreax.hackaton.data.car
+package com.subreax.hackaton.data.mileage
 
 import android.content.Context
 import com.subreax.hackaton.data.Car

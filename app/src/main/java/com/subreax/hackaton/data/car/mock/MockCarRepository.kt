@@ -3,6 +3,7 @@ package com.subreax.hackaton.data.car.mock
 import com.subreax.hackaton.data.Car
 import com.subreax.hackaton.data.CarPart
 import com.subreax.hackaton.data.CarPartGroup
+import com.subreax.hackaton.data.CarTemplate
 import com.subreax.hackaton.data.car.CarRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -65,14 +66,15 @@ class MockCarRepository @Inject constructor(
 
     private val cars = mutableListOf(templateCars[0])
 
-    override suspend fun getCarTemplates(): List<Car> {
-        return withContext(Dispatchers.IO) {
+    override suspend fun getCarTemplates(): List<CarTemplate> {
+        /*return withContext(Dispatchers.IO) {
             delay(1000)
             templateCars
-        }
+        }*/
+        return emptyList()
     }
 
-    override suspend fun getCarTemplateById(id: UUID): Car? {
+    override suspend fun getCarById(id: UUID): Car? {
         return templateCars.find { it.id == id }?.getNewCar()
     }
 
@@ -86,5 +88,13 @@ class MockCarRepository @Inject constructor(
 
     override suspend fun addCar(car: Car) {
         cars.add(car)
+    }
+
+    override suspend fun hasAtLeastOneCar(): Boolean {
+        return false
+    }
+
+    override suspend fun createCarFromTemplateById(id: UUID): Car {
+        return templateCars[0] // todo: неправильно
     }
 }

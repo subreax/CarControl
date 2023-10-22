@@ -39,7 +39,7 @@ class CarEditorViewModel @Inject constructor(
             title = "Редактирование машины"
 
             viewModelScope.launch {
-                val car = carRepository.getCarTemplateById(UUID.fromString(carId))!!
+                val car = carRepository.getCarById(UUID.fromString(carId))!!
                 carName = car.name
                 _parts.clear()
                 _parts.addAll(car.parts)

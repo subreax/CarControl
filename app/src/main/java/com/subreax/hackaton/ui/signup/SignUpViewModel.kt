@@ -34,7 +34,7 @@ class SignUpViewModel @Inject constructor(
     var error by mutableStateOf("")
         private set
 
-    var eventNavHomeScreen by mutableStateOf(false)
+    var eventNavNext by mutableStateOf(false)
         private set
 
     fun updateEmail(newEmail: String) {
@@ -68,14 +68,15 @@ class SignUpViewModel @Inject constructor(
         error = ""
         viewModelScope.launch {
             try {
-                authRepository.signUp(SignUpData(email, username, password))
+                authRepository.signUp(SignUpData(email.trim(), username.trim(), password))
+                eventNavNext = true
             } catch (ex: Exception) {
                 error = ex.message ?: "Неизвестная ошибка"
             }
         }
     }
 
-    fun navHomeScreenHandled() {
-        eventNavHomeScreen = false
+    fun navNextHandled() {
+        eventNavNext = false
     }
 }
